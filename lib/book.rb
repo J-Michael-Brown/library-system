@@ -1,10 +1,10 @@
 class Book
   attr_reader :title, :author, :id
   def initialize(attributes)
-    @title
-    @author
+    @title = attributes.fetch(:title)
+    @author = attributes.fetch(:author)
     if attributes.include?(:id)
-      @id = (attributes.fetch(:id))
+      @id = (attributes.fetch(:id).to_i)
     else
       @id = nil
     end
