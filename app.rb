@@ -25,6 +25,7 @@ get ('/shelf/book/:book_id') do
 end
 
 get ('/admin') do
+  @books = Book.all
   erb(:admin)
 end
 
@@ -43,4 +44,11 @@ patch ('/admin/book_database') do
   @new_book.save
   @books = Book.all
   erb(:book_database)
+end
+
+get ('/admin/book_database/book/:book_id') do
+  book_id = params[:book_id].to_i
+  @book = Book.find(book_id)
+  @books = Book.all
+  erb(:book)
 end

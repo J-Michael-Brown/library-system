@@ -6,3 +6,8 @@
   <input type="text" name="title" placeholder="The Great Gatsby">
   <button type="submit" name="add-book">Instansiate new Book</button>
 </form>
+<br>
+<% @books.each do |book| %>
+  <a href="/admin/book_database/book/<%=book.id%>"><%= book.title %></a>
+  <p>book.author</p>
+<% end %>

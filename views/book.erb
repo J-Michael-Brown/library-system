@@ -1,1 +1,7 @@
 <h2><%= @book.title %></h2>
+<h3><%= @book.author %></h3>
+<form class="" action="/admin/book_database/book/:book_id" method="post">
+  <input type="hidden" name="_method" value="patch">
+  <input type="text" name="author" placeholder="Last name, first name">
+  <button type="submit" name="button"></button>
+</form>
