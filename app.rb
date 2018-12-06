@@ -13,16 +13,34 @@ get ('/') do
   erb(:index)
 end
 
-get ('/admin') do
-  erb(:admin)
-end
-
 get('/shelf') do
   @books = Book.all
   erb(:shelf)
 end
 
 get ('/shelf/book/:book_id') do
-  @book = Book.find(params[:id].to_i)
+  book_id = params[:book_id].to_i
+  @book = Book.find(book_id)
   erb(:book)
+end
+
+get ('/admin') do
+  erb(:admin)
+end
+
+get ('/admin/book_database') do
+  @books = Book.all
+  erb(:book_database)
+end
+
+patch ('/admin/book_database') do
+  title = params.fetch("title")
+  author = params.fetch("author")
+  @new_book = Book.new({
+    :author => author,
+    :title => title
+  })
+  @new_book.save
+  @books = Book.all
+  erb(:book_database)
 end

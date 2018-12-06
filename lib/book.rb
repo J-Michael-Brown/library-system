@@ -18,12 +18,7 @@ class Book
   def delete!()
     DB.exec("DELETE FROM books WHERE id = #{self.id}")
     DB.exec("DELETE FROM checkouts WHERE book_id = #{self.id}")
-    new_book = Book.all
-    if new_book.include?(self)
-      return 'deleted'
-    else
-      return 'didn\'t work'
-    end
+    new_books = Book.all
   end
 
   def self.all
