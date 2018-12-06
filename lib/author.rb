@@ -5,11 +5,11 @@ class Author
   def initialize(attributes)
     @last_name = attributes.fetch(:last_name)
     @first_name = attributes.fetch(:first_name)
-    if attributes.include?(:book_ids)
-      @book_ids = attributes.fetch(:book_ids)
-    else
-      @book_ids = []
-    end
+    # if attributes.include?(:book_ids)
+      @book_ids = attributes.fetch(:book_ids, [])
+    # else
+      # @book_ids = []
+    # end
     if attributes.include?(:id)
       @id = attributes.fetch(:id)
     else
@@ -73,12 +73,27 @@ end
 def convert_sql_num_array(sql_str)
   sql_num_array = convert_sql_array(sql_str)
   nums = []
+
   sql_num_array.each do |num|
-    nums.push(num.to_i)
+    # binding.pry
+    if num != "{}"
+      nums.push(num.to_i)
+    end
   end
   nums
 end
 
-def convert_sql_array(sql_str)
-  (sql_str.split('')-["{","}","'"]).join.split(',')
+def convert_sql_array(sql_str) # input looks like "{1,2,3}" or "{'one','two','three'}"
+  new_array = (sql_str.split('')-["{","}"]).join.split(',')
+end
+
+def convert_sql_str_array(sql_str)
+  new_array = convert_sql_array(sql_str)
+  output = []
+  new_array.each do |item|
+    partial = item.split('')[1..-1]
+    partial.pop
+    output.push(partial.join)
+  end
+  output
 end
