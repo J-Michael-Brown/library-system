@@ -1,8 +1,10 @@
+require('psql_methods')
+
 class Book
-  attr_reader :title, :author, :id
+  attr_reader :title, :author_ids, :id
   def initialize(attributes)
     @title = attributes.fetch(:title)
-    @author = attributes.fetch(:author)
+    @author_ids = attributes.fetch(:author_ids)
     if attributes.include?(:id)
       @id = (attributes.fetch(:id).to_i)
     else
@@ -11,7 +13,7 @@ class Book
   end
 
   def save
-    result = DB.exec("INSERT INTO books (title, author) VALUES ('#{@title}', '#{@author}') RETURNING id;")
+    result = DB.exec("INSERT INTO books (title, author_ids) VALUES ('#{@title}', '#{int_array_to_psql(@author_ids)}') RETURNING id;")
     @id = result.first().fetch("id").to_i()
   end
 
@@ -27,8 +29,8 @@ class Book
     returned_books.each() do |book|
       title = book.fetch("title")
       id = book.fetch("id").to_i()
-      author = book.fetch("author")
-      books.push(Book.new({:title => title, :id => id, :author => author}))
+      author_ids = convert_sql_int_array(book.fetch("author_ids"))
+      books.push(Book.new({:title => title, :id => id, :author_ids => author_ids}))
     end
     books
   end
@@ -36,13 +38,13 @@ class Book
   def self.find(id)
     result = DB.exec("SELECT * FROM books WHERE id = #{id};")
     output_book = Book.new({
-      :author => result.first.fetch("author"),
+      :author_ids => convert_sql_int_array(result.first.fetch("author_ids")),
       :title => result.first.fetch("title"),
       :id => result.first.fetch("id").to_i
       })
   end
 
   def ==(another_book)
-    self.author().==(another_book.author()).&(self.id().==(another_book.id())).&(self.title().==(another_book.title()))
+    self.author_ids().==(another_book.author_ids()).&(self.id().==(another_book.id())).&(self.title().==(another_book.title()))
   end
 end
