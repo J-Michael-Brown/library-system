@@ -2,11 +2,3 @@
 <div class="options-bar">
   <a href="/admin/book_database">Book Database</a>
 </div>
-<div class="book-list">
-  <dl>
-    <% @books.each do |book| %>
-    <dt><a href="/admin/book_database/book/<%=book.id%>"><%= book.title %></a></dt>
-    <dd><%= book.author %></dd>
-    <% end %>
-  </dl>
-</div>

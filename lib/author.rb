@@ -1,4 +1,4 @@
-require("psql_methods")
+
 
 class Author
 
@@ -49,12 +49,21 @@ class Author
 
   def self.find(id)
     result = DB.exec("SELECT * FROM authors WHERE id = #{id};")
+    if result.any?
     output_author = Author.new({
-      :book_ids => convert_sql_int_array(result.first.fetch("book_ids")),
-      :first_name => result.first.fetch("first_name"),
-      :id => result.first.fetch("id").to_i,
-      :last_name => result.first.fetch("last_name")
+      :book_ids => convert_sql_int_array(result.first.fetch("book_ids", [])),
+      :first_name => result.first.fetch("first_name", "existance"),
+      :id => result.first.fetch("id", "0").to_i,
+      :last_name => result.first.fetch("last_name", "void")
       })
+    else
+      output_author = Author.new({
+        :book_ids => [],
+        :first_name => "existance",
+        :id => 0,
+        :last_name => "void"
+      })
+    end
   end
 
   def ==(another_author)

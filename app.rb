@@ -5,6 +5,7 @@ require('./lib/book')
 require('./lib/patron')
 require('./lib/checkout')
 require('./lib/author')
+require('./lib/psql_methods')
 require('pry')
 require('pg')
 
@@ -27,6 +28,7 @@ end
 
 get ('/admin') do
   @books = Book.all
+  @authors = Author.all
   erb(:admin)
 end
 

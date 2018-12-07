@@ -1,13 +1,18 @@
 <form action="/admin/book_database" method="post">
   <input type="hidden" name="_method" value="patch">
   <label for="author">Author Name:</label>
-  <input type="text" name="author" placeholder="Last, First">
+  <input type="text" name="last" placeholder="Last">
+  <input type="text" name="first" placeholder="first">
   <label for="title">Book Title:</label>
   <input type="text" name="title" placeholder="The Great Gatsby">
   <button type="submit" name="add-book">Instansiate new Book</button>
 </form>
 <br>
-<% @books.each do |book| %>
-  <a href="/admin/book_database/book/<%=book.id%>"><%= book.title %></a>
-  <p>book.author</p>
-<% end %>
+<dl>
+  <% @books.each do |book| %>
+    <dt><a href="/admin/book_database/book/<%=book.id%>"><%= book.title %></a></dt>
+    <% book.find_author_names.each do |name| %>
+      <dd><%= name[0] %>, <%= name[1] %></dd>
+    <% end %>
+  <% end %>
+</dl>

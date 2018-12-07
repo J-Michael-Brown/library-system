@@ -11,7 +11,11 @@ def convert_sql_int_array(sql_str)
 end
 
 def convert_sql_array(sql_str) # input looks like "{1,2,3}" or "{'one','two','three'}"
-  new_array = (sql_str.split('')-["{","}"]).join.split(',')
+  if sql_str == nil
+    return sql_str
+  else
+    new_array = (sql_str.split('')-["{","}"]).join.split(',')
+  end
 end
 
 def convert_sql_str_array(sql_str)

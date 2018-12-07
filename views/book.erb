@@ -1,5 +1,8 @@
 <h2><%= @book.title %></h2>
-<h3><%= @book.author %></h3>
+<% @book.find_author_names.each do |names| %>
+  <p><%= names[0] %>, <%= names[1] %></p>
+  
+<% end %>
 <form class="" action="/admin/book_database/book/:book_id" method="post">
   <input type="hidden" name="_method" value="patch">
   <input type="text" name="author" placeholder="Last name, first name">
