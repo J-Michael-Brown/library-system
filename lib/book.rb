@@ -55,8 +55,7 @@ class Book
       DB.exec("UPDATE authors SET book_ids = '#{int_array_to_psql(new_book_ids)}' WHERE id = #{author_id};")
     end
     DB.exec("UPDATE books SET author_ids = '{}' WHERE id = #{@id};")
-    new_self = Book.find(@id)
-    @author_ids = new_self.author_ids
+    @author_ids = []
   end
 
   def find_author_names

@@ -34,13 +34,49 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
+-- Name: authors; Type: TABLE; Schema: public; Owner: Guest
+--
+
+CREATE TABLE public.authors (
+    id integer NOT NULL,
+    book_ids integer[],
+    first_name character varying,
+    last_name character varying
+);
+
+
+ALTER TABLE public.authors OWNER TO "Guest";
+
+--
+-- Name: authors_id_seq; Type: SEQUENCE; Schema: public; Owner: Guest
+--
+
+CREATE SEQUENCE public.authors_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.authors_id_seq OWNER TO "Guest";
+
+--
+-- Name: authors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Guest
+--
+
+ALTER SEQUENCE public.authors_id_seq OWNED BY public.authors.id;
+
+
+--
 -- Name: books; Type: TABLE; Schema: public; Owner: Guest
 --
 
 CREATE TABLE public.books (
     id integer NOT NULL,
-    author character varying,
-    title character varying
+    title character varying,
+    author_ids integer[]
 );
 
 
@@ -139,6 +175,13 @@ ALTER SEQUENCE public.patron_id_seq OWNED BY public.patrons.id;
 
 
 --
+-- Name: authors id; Type: DEFAULT; Schema: public; Owner: Guest
+--
+
+ALTER TABLE ONLY public.authors ALTER COLUMN id SET DEFAULT nextval('public.authors_id_seq'::regclass);
+
+
+--
 -- Name: books id; Type: DEFAULT; Schema: public; Owner: Guest
 --
 
@@ -160,11 +203,21 @@ ALTER TABLE ONLY public.patrons ALTER COLUMN id SET DEFAULT nextval('public.patr
 
 
 --
+-- Data for Name: authors; Type: TABLE DATA; Schema: public; Owner: Guest
+--
+
+COPY public.authors (id, book_ids, first_name, last_name) FROM stdin;
+3	{4}	Michael	Brown
+2	{4}	quinn	miller
+\.
+
+
+--
 -- Data for Name: books; Type: TABLE DATA; Schema: public; Owner: Guest
 --
 
-COPY public.books (id, author, title) FROM stdin;
-1	Miller, Quinn	My Thesaurus
+COPY public.books (id, title, author_ids) FROM stdin;
+4	book title	{2,3}
 \.
 
 
@@ -185,10 +238,17 @@ COPY public.patrons (id, name) FROM stdin;
 
 
 --
+-- Name: authors_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Guest
+--
+
+SELECT pg_catalog.setval('public.authors_id_seq', 3, true);
+
+
+--
 -- Name: books_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Guest
 --
 
-SELECT pg_catalog.setval('public.books_id_seq', 1, true);
+SELECT pg_catalog.setval('public.books_id_seq', 4, true);
 
 
 --
@@ -203,6 +263,14 @@ SELECT pg_catalog.setval('public.checkouts_id_seq', 1, false);
 --
 
 SELECT pg_catalog.setval('public.patron_id_seq', 1, false);
+
+
+--
+-- Name: authors authors_pkey; Type: CONSTRAINT; Schema: public; Owner: Guest
+--
+
+ALTER TABLE ONLY public.authors
+    ADD CONSTRAINT authors_pkey PRIMARY KEY (id);
 
 
 --
